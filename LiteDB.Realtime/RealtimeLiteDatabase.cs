@@ -61,7 +61,7 @@ namespace LiteDB.Realtime
         {
             foreach (var broadcast in notifications.Broadcasts)
             {
-                if (broadcast.Key == subscription.Collection)
+                if (broadcast == subscription.Collection)
                 {
                     return true;
                 }
@@ -72,7 +72,7 @@ namespace LiteDB.Realtime
                 foreach (var coll in notifications.Collections)
                 {
                     // collection
-                    if (coll.Key == subscription.Collection)
+                    if (coll == subscription.Collection)
                     {
                         return true;
                     }
@@ -82,7 +82,7 @@ namespace LiteDB.Realtime
             {
                 foreach (var doc in notifications.Documents)
                 {
-                    (string coll, BsonValue id) = doc.Key;
+                    (string coll, BsonValue id) = doc;
                     if (coll == subscription.Collection && id == subscription.Id)
                     {
                         return true;
