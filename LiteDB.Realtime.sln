@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteDB.Realtime", "LiteDB.Realtime\LiteDB.Realtime.csproj", "{A1F0E920-6DFD-44F3-B455-22738A9E3BFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteDB.Realtime.Test", "LiteDB.Realtime.Test\LiteDB.Realtime.Test.csproj", "{215785A5-8A5C-484A-BD76-72F9DA74D6AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1F0E920-6DFD-44F3-B455-22738A9E3BFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F0E920-6DFD-44F3-B455-22738A9E3BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F0E920-6DFD-44F3-B455-22738A9E3BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F0E920-6DFD-44F3-B455-22738A9E3BFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{215785A5-8A5C-484A-BD76-72F9DA74D6AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{215785A5-8A5C-484A-BD76-72F9DA74D6AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{215785A5-8A5C-484A-BD76-72F9DA74D6AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{215785A5-8A5C-484A-BD76-72F9DA74D6AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {16B147D2-3414-4BBD-99DC-6D66AB1E670B}
+	EndGlobalSection
+EndGlobal
