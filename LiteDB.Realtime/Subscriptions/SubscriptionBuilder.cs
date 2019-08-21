@@ -13,13 +13,17 @@ namespace LiteDB.Realtime.Subscriptions
         {
             _subscription.IsCollection = true;
             _subscription.ObserverObject = observer;
-            return _database.Subscribe(_subscription);
+            var disposable = _database.Subscribe(_subscription);
+            _subscription.OnNext();
+            return disposable;
         }
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
             _subscription.ObserverObject = observer;
-            return _database.Subscribe(_subscription);
+            var disposable = _database.Subscribe(_subscription);
+            _subscription.OnNext();
+            return disposable;
         }
     }
 }

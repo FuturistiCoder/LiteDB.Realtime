@@ -11,49 +11,49 @@ namespace LiteDB.Realtime.Test.Notifications
         public void Add_Broadcast_Notification()
         {
             var cache = new NotificationCache();
-            cache.Broadcasts.Count.Should().Be(0);
+            cache.Broadcasts.Should().BeEmpty();
 
             cache.AddBroadcast("coll1");
             cache.AddBroadcast("coll2");
 
-            cache.Broadcasts.Count.Should().Be(2);
+            cache.Broadcasts.Should().HaveCount(2);
             cache.Broadcasts.Contains("coll1").Should().BeTrue();
             cache.Broadcasts.Contains("coll2").Should().BeTrue();
             cache.Broadcasts.Contains("coll3").Should().BeFalse();
 
             cache.Clear();
-            cache.Broadcasts.Count.Should().Be(0);
+            cache.Broadcasts.Should().BeEmpty();
         }
 
         [Fact]
         public void Add_Collection_Notification()
         {
             var cache = new NotificationCache();
-            cache.Collections.Count.Should().Be(0);
+            cache.Collections.Should().BeEmpty();
 
             cache.AddCollection("coll1");
             cache.AddCollection("coll2");
 
-            cache.Collections.Count.Should().Be(2);
+            cache.Collections.Should().HaveCount(2);
             cache.Collections.Contains("coll1").Should().BeTrue();
             cache.Collections.Contains("coll2").Should().BeTrue();
             cache.Collections.Contains("coll3").Should().BeFalse();
 
             cache.Clear();
-            cache.Collections.Count.Should().Be(0);
+            cache.Collections.Should().BeEmpty();
         }
 
         [Fact]
         public void Add_Document_Notification()
         {
             var cache = new NotificationCache();
-            cache.Documents.Count.Should().Be(0);
+            cache.Documents.Should().BeEmpty();
 
             cache.AddDocuments("coll1", new[] { new BsonValue(1), new BsonValue(2) });
-            cache.Documents.Count.Should().Be(2);
+            cache.Documents.Should().HaveCount(2);
 
             cache.AddDocuments("coll2", new[] { new BsonValue(1), new BsonValue(3) });
-            cache.Documents.Count.Should().Be(4);
+            cache.Documents.Should().HaveCount(4);
 
             cache.Documents.Contains(("coll1", new BsonValue(1))).Should().BeTrue();
             cache.Documents.Contains(("coll1", new BsonValue(2))).Should().BeTrue();
@@ -64,7 +64,7 @@ namespace LiteDB.Realtime.Test.Notifications
             cache.Documents.Contains(("coll2", new BsonValue(2))).Should().BeFalse();
 
             cache.Clear();
-            cache.Documents.Count.Should().Be(0);
+            cache.Documents.Should().BeEmpty();
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace LiteDB.Realtime.Test.Notifications
             cache.AddBroadcast("coll2");
 
             cache.AddDocuments("coll1", new[] { new BsonValue(1), new BsonValue(2) });
-            cache.Documents.Count.Should().Be(0);
+            cache.Documents.Should().BeEmpty();
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace LiteDB.Realtime.Test.Notifications
             cache.AddBroadcast("coll2");
 
             cache.AddDocuments("coll3", new[] { new BsonValue(1), new BsonValue(2) });
-            cache.Documents.Count.Should().Be(2);
+            cache.Documents.Should().HaveCount(2);
         }
 
 
@@ -98,7 +98,7 @@ namespace LiteDB.Realtime.Test.Notifications
             cache.AddBroadcast("coll2");
 
             cache.AddCollection("coll1");
-            cache.Documents.Count.Should().Be(0);
+            cache.Documents.Should().BeEmpty();
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace LiteDB.Realtime.Test.Notifications
             cache.AddBroadcast("coll2");
 
             cache.AddCollection("coll3");
-            cache.Collections.Count.Should().Be(1);
+            cache.Collections.Should().HaveCount(1);
         }
 
         [Fact]
@@ -118,10 +118,10 @@ namespace LiteDB.Realtime.Test.Notifications
             var cache = new NotificationCache();
             cache.AddDocuments("coll1", new[] { new BsonValue(1), new BsonValue(2) });
             cache.AddDocuments("coll2", new[] { new BsonValue(1), new BsonValue(3) });
-            cache.Documents.Count.Should().Be(4);
+            cache.Documents.Should().HaveCount(4);
 
             cache.AddBroadcast("coll1");
-            cache.Documents.Count.Should().Be(2);
+            cache.Documents.Should().HaveCount(2);
             cache.Documents.Where(doc => doc.Item1 == "coll2").Count().Should().Be(2);
         }
 
@@ -131,10 +131,10 @@ namespace LiteDB.Realtime.Test.Notifications
             var cache = new NotificationCache();
             cache.AddCollection("coll1");
             cache.AddCollection("coll2");
-            cache.Collections.Count.Should().Be(2);
+            cache.Collections.Should().HaveCount(2);
 
             cache.AddBroadcast("coll1");
-            cache.Collections.Count.Should().Be(1);
+            cache.Collections.Should().HaveCount(1);
             cache.Collections.Where(coll => coll == "coll2").Count().Should().Be(1);
         }
     }

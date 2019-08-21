@@ -43,6 +43,11 @@ namespace LiteDB.Realtime.Test.Database
                 List<Item> receivedItems = null;
                 // collection subscription
                 db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+
+                //waiting for notification
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+                receivedItems.Should().BeEmpty();
+
                 var newItem = new Item
                 {
                     Name = "Keyboard",
@@ -55,7 +60,7 @@ namespace LiteDB.Realtime.Test.Database
                 Thread.Sleep(TimeSpan.FromSeconds(1));
 
                 receivedItems.Should().NotBeNull();
-                receivedItems.Count.Should().Be(1);
+                receivedItems.Should().HaveCount(1);
                 receivedItems[0].Id.Should().Be(newId.AsGuid);
                 receivedItems[0].Name.Should().Be(newItem.Name);
                 receivedItems[0].Price.Should().Be(newItem.Price);
@@ -74,12 +79,21 @@ namespace LiteDB.Realtime.Test.Database
                     Price = 100m
                 };
                 var newId = db.GetCollection<Item>("items").Insert(newItem);
+                newItem.Id = newId.AsGuid;
+
                 // docuement subscription
                 db.Realtime.Collection<Item>("items").Id(newId).Subscribe(item => receivedItem = item);
 
-                newItem.Id = newId.AsGuid;
-                newItem.Price = 99m;
+                // waiting for notification
+                Thread.Sleep(TimeSpan.FromSeconds(1));
 
+                receivedItem.Should().NotBeNull();
+                receivedItem.Id.Should().Be(newItem.Id);
+                receivedItem.Name.Should().Be(newItem.Name);
+                receivedItem.Price.Should().Be(newItem.Price);
+
+                // updating newItem
+                newItem.Price = 99m;
                 db.GetCollection<Item>("items").Update(newItem);
 
                 // waiting for notification
@@ -105,12 +119,28 @@ namespace LiteDB.Realtime.Test.Database
                     Price = 100m
                 };
                 var newId = db.GetCollection<Item>("items").Insert(newItem);
+                newItem.Id = newId.AsGuid;
 
                 // docuement subscription
                 db.Realtime.Collection<Item>("items").Id(newId).Subscribe(item => receivedItem = item);
                 // collection subscription
                 db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
 
+                // waiting for notification
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+
+                // document subscription received
+                receivedItem.Should().NotBeNull();
+                receivedItem.Id.Should().Be(newItem.Id);
+                receivedItem.Name.Should().Be(newItem.Name);
+                receivedItem.Price.Should().Be(newItem.Price);
+
+                // collection subscription received
+                receivedItems.Should().NotBeNull();
+                receivedItems.Should().HaveCount(1);
+                receivedItems[0].Id.Should().Be(newItem.Id);
+                receivedItems[0].Name.Should().Be(newItem.Name);
+                receivedItems[0].Price.Should().Be(newItem.Price);
 
                 // update with expression (will broadcast)
                 int updatedNum = db.GetCollection<Item>("items").UpdateMany(item =>  new Item { Id = item.Id, Name = item.Name, Price = item.Price * 2 }, i => i.Price > 0);
@@ -127,7 +157,7 @@ namespace LiteDB.Realtime.Test.Database
 
                 // collection subscription received
                 receivedItems.Should().NotBeNull();
-                receivedItems.Count.Should().Be(1);
+                receivedItems.Should().HaveCount(1);
                 receivedItems[0].Id.Should().Be(newId.AsGuid);
                 receivedItems[0].Name.Should().Be(newItem.Name);
                 receivedItems[0].Price.Should().Be(newItem.Price * 2);
