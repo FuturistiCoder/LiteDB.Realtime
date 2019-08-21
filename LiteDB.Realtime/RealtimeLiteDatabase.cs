@@ -1,10 +1,10 @@
 ﻿using LiteDB.Engine;
 using LiteDB.Realtime.Helpers;
+using LiteDB.Realtime.Notifications;
 using LiteDB.Realtime.Subscriptions;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace LiteDB.Realtime
 {
@@ -15,7 +15,7 @@ namespace LiteDB.Realtime
         private readonly RealtimeLiteEngine _engine;
         private readonly SubscriptionDict _subscriptions = new SubscriptionDict();
 
-        public RealtimeLiteDatabase(string connectionString, BsonMapper mapper = null) 
+        public RealtimeLiteDatabase(string connectionString, BsonMapper mapper = null)
             : this(new ConnectionString(connectionString), mapper)
         {
         }
@@ -38,28 +38,28 @@ namespace LiteDB.Realtime
             {
                 throw new NotSupportedException();
             }
-            _engine.NotificationCallback = OnNotified;
+            _engine._notificationService.NotificationCallback = OnNotified;
         }
 
-        private void OnNotified(Notifications notifications)
+        private void OnNotified(NotificationCache cache)
         {
-            if (notifications is null)
+            if (cache is null)
             {
                 return;
             }
 
-            foreach(var subscription in _subscriptions.Keys)
+            foreach (var subscription in _subscriptions.Keys)
             {
-                if (AreMatched(subscription, notifications))
+                if (AreMatched(subscription, cache))
                 {
                     subscription.OnNext();
                 }
             }
         }
 
-        private bool AreMatched(ISubscription subscription, Notifications notifications)
+        private bool AreMatched(ISubscription subscription, NotificationCache cache)
         {
-            foreach (var broadcast in notifications.Broadcasts)
+            foreach (var broadcast in cache.Broadcasts)
             {
                 if (broadcast == subscription.Collection)
                 {
@@ -69,7 +69,7 @@ namespace LiteDB.Realtime
 
             if (subscription.IsCollection)
             {
-                foreach (var coll in notifications.Collections)
+                foreach (var coll in cache.Collections)
                 {
                     // collection
                     if (coll == subscription.Collection)
@@ -80,7 +80,7 @@ namespace LiteDB.Realtime
             }
             else
             {
-                foreach (var doc in notifications.Documents)
+                foreach (var doc in cache.Documents)
                 {
                     (string coll, BsonValue id) = doc;
                     if (coll == subscription.Collection && id == subscription.Id)

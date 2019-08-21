@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace LiteDB.Realtime
+namespace LiteDB.Realtime.Notifications
 {
-    internal class Notifications
+    internal class NotificationCache
     {
         /// <summary>
         /// Broadcast notifications (for collection and all documents)
         /// CollectionName, _
         /// </summary>
-        private readonly ConcurrentDictionary<string, byte> _broadcasts  = new ConcurrentDictionary<string, byte>();
+        private readonly ConcurrentDictionary<string, byte> _broadcasts = new ConcurrentDictionary<string, byte>();
         public ICollection<string> Broadcasts => _broadcasts.Keys;
         /// <summary>
         /// Collection notifications
@@ -28,7 +26,10 @@ namespace LiteDB.Realtime
         private readonly ConcurrentDictionary<(string, BsonValue), byte> _documents = new ConcurrentDictionary<(string, BsonValue), byte>();
         public ICollection<(string, BsonValue)> Documents => _documents.Keys;
 
-        public void NotifyCollection(string collectionName)
+        /// <summary>
+        /// Add a collection to notify
+        /// </summary>
+        public void AddCollection(string collectionName)
         {
             if (!_broadcasts.ContainsKey(collectionName))
             {
@@ -36,29 +37,38 @@ namespace LiteDB.Realtime
             }
         }
 
-        public void BroadcastCollectionAndDocument(string collectionName)
+        /// <summary>
+        /// Add a broadcast to notify (collection and all documents)
+        /// </summary>
+        public void AddBroadcast(string collectionName)
         {
             _broadcasts.TryAdd(collectionName, default);
             var CollsToDelete = _collections.Keys.Where(key => key == collectionName);
-            foreach(var key in CollsToDelete)
+            foreach (var key in CollsToDelete)
             {
                 _collections.TryRemove(key, out byte _);
             }
 
             var DocsToDelete = _documents.Keys.Where(key => key.Item1 == collectionName);
-            foreach(var key in DocsToDelete)
+            foreach (var key in DocsToDelete)
             {
                 _documents.TryRemove(key, out byte _);
             }
         }
 
-        public void NotifyDocument(string collectionName, IEnumerable<BsonDocument> documents)
+        /// <summary>
+        /// Add a list of documents to notify
+        /// </summary>
+        public void AddDocuments(string collectionName, IEnumerable<BsonDocument> documents)
         {
             var ids = documents.Select(doc => doc["_id"]);
-            NotifyDocument(collectionName, ids);
+            AddDocuments(collectionName, ids);
         }
 
-        public void NotifyDocument(string collectionName, IEnumerable<BsonValue> ids)
+        /// <summary>
+        /// Add a list of documents to notify
+        /// </summary>
+        public void AddDocuments(string collectionName, IEnumerable<BsonValue> ids)
         {
             if (_broadcasts.TryGetValue(collectionName, out _))
             {
@@ -77,6 +87,5 @@ namespace LiteDB.Realtime
             _collections.Clear();
             _documents.Clear();
         }
-
     }
 }
