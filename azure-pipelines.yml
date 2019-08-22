@@ -5,7 +5,7 @@ jobs:
   - job: windows
     timeoutInMinutes: 20
     pool:
-      vmImage: 'vs2017-win2016'
+      vmImage: 'windows-latest'
 
     variables:
       solution: '**/*.sln'
@@ -13,23 +13,12 @@ jobs:
       buildConfiguration: 'Release'
 
     steps:
-
-    - task: NuGetToolInstaller@0
+    - task: VSBuild@1
       inputs:
-        versionSpec: '4.9.4'
-
-    - task: DotNetCoreCLI@2
-      displayName: dotnet restore
-      inputs:
-        command: 'restore'
-        projects: '$(solution)'
-
-    - task: DotNetCoreCLI@2
-      displayName: dotnet build
-      inputs:
-        command: 'build'
-        projects: '$(solution)'
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
+        msbuildArgs: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
 
     - task: DotNetCoreCLI@2
       displayName: dotnet test
