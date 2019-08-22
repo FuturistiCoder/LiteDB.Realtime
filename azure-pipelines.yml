@@ -32,7 +32,6 @@ jobs:
       inputs:
         command: 'build'
         projects: '$(solution)'
-        configuration: '$(buildConfiguration)'
 
     - task: DotNetCoreCLI@2
       displayName: dotnet test
