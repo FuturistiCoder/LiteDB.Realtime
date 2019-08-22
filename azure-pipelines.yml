@@ -14,9 +14,11 @@ jobs:
 
     steps:
 
-    - task: NuGetToolInstaller@0
+    - task: UseDotNet@2
       inputs:
-        versionSpec: '4.9.4'
+        packageType: 'sdk'
+        version: 
+        includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
       displayName: dotnet restore
