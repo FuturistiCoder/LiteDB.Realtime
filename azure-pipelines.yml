@@ -17,8 +17,9 @@ jobs:
     - task: UseDotNet@2
       inputs:
         packageType: 'sdk'
-        version: 
+        version: '3.0.100-preview3-010431'
         includePreviewVersions: true
+
 
     - task: DotNetCoreCLI@2
       displayName: dotnet restore
