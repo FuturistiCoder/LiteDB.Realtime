@@ -13,26 +13,12 @@ jobs:
       buildConfiguration: 'Release'
 
     steps:
-
-    - task: UseDotNet@2
+    - task: VSBuild@1
       inputs:
-        packageType: 'sdk'
-        version: '3.0.100-preview8-013656'
-        includePreviewVersions: true
-
-
-    - task: DotNetCoreCLI@2
-      displayName: dotnet restore
-      inputs:
-        command: 'restore'
-        projects: '$(solution)'
-
-    - task: DotNetCoreCLI@2
-      displayName: dotnet build
-      inputs:
-        command: 'build'
-        projects: '$(solution)'
-        arguments: '-c $(buildConfiguration)'
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+        msbuildArgs: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
 
     - task: DotNetCoreCLI@2
       displayName: dotnet test
