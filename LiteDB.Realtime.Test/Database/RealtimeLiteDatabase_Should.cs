@@ -68,11 +68,12 @@ namespace LiteDB.Realtime.Test.Database
         }
 
         [Fact]
-        public void Notify_Docuemnt_Subscription_When_The_Document_Modified()
+        public void Notify_Docuemnt_And_Collection_Subscription_When_The_Document_Modified()
         {
             using (var db = new RealtimeLiteDatabase(new MemoryStream()))
             {
                 Item receivedItem = null;
+                List<Item> receivedItems = null;
                 var newItem = new Item
                 {
                     Name = "Keyboard",
@@ -84,13 +85,24 @@ namespace LiteDB.Realtime.Test.Database
                 // docuement subscription
                 db.Realtime.Collection<Item>("items").Id(newId).Subscribe(item => receivedItem = item);
 
+                // collection subscription
+                db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+
                 // waiting for notification
                 Thread.Sleep(TimeSpan.FromSeconds(1));
 
+                // document subscription received
                 receivedItem.Should().NotBeNull();
                 receivedItem.Id.Should().Be(newItem.Id);
                 receivedItem.Name.Should().Be(newItem.Name);
                 receivedItem.Price.Should().Be(newItem.Price);
+
+                // collection subscription received
+                receivedItems.Should().NotBeNull();
+                receivedItems.Should().HaveCount(1);
+                receivedItems[0].Id.Should().Be(newItem.Id);
+                receivedItems[0].Name.Should().Be(newItem.Name);
+                receivedItems[0].Price.Should().Be(newItem.Price);
 
                 // updating newItem
                 newItem.Price = 99m;
@@ -99,10 +111,18 @@ namespace LiteDB.Realtime.Test.Database
                 // waiting for notification
                 Thread.Sleep(TimeSpan.FromSeconds(1));
 
+                // document subscription received
                 receivedItem.Should().NotBeNull();
                 receivedItem.Id.Should().Be(newItem.Id);
                 receivedItem.Name.Should().Be(newItem.Name);
                 receivedItem.Price.Should().Be(newItem.Price);
+
+                // collection subscription received
+                receivedItems.Should().NotBeNull();
+                receivedItems.Should().HaveCount(1);
+                receivedItems[0].Id.Should().Be(newItem.Id);
+                receivedItems[0].Name.Should().Be(newItem.Name);
+                receivedItems[0].Price.Should().Be(newItem.Price);
             }
         }
 

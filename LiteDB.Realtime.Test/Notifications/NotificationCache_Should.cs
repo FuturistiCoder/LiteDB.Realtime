@@ -68,6 +68,18 @@ namespace LiteDB.Realtime.Test.Notifications
         }
 
         [Fact]
+        public void Add_Collection_Notification_When_Adding_Document_Notification()
+        { 
+            var cache = new NotificationCache();
+            cache.Documents.Should().BeEmpty();
+
+            cache.AddDocuments("coll1", new[] { new BsonValue(1), new BsonValue(2) });
+            cache.Documents.Should().HaveCount(2);
+
+            cache.Collections.Contains("coll1").Should().BeTrue();
+        }
+
+        [Fact]
         public void Not_Add_The_Document_Notification_If_It_Matches_With_Any_Broadcast()
         {
             var cache = new NotificationCache();

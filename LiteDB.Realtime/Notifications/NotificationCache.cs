@@ -75,6 +75,8 @@ namespace LiteDB.Realtime.Notifications
                 return;
             }
 
+            AddCollection(collectionName);
+
             foreach (var id in ids)
             {
                 _documents[(collectionName, id)] = default;
