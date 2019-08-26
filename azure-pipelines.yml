@@ -11,6 +11,9 @@ jobs:
       solution: '**/*.sln'
       buildPlatform: 'Any CPU'
       buildConfiguration: 'Release'
+      majorVersion: 1
+      minorVersion: 0
+      patchVersion: 0
 
     steps:
     - task: VSBuild@1
@@ -38,7 +41,14 @@ jobs:
         command: 'pack'
         packagesToPack: '**/*.csproj'
         nobuild: true
+        includesymbols: true
         versioningScheme: 'byPrereleaseNumber'
-        majorVersion: '1'
-        minorVersion: '0'
-        patchVersion: '0'
+        majorVersion: '$(majorVersion)'
+        minorVersion: '$(minorVersion)'
+        patchVersion: '$(patchVersion)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'artifacts'
+        publishLocation: 'Container'
