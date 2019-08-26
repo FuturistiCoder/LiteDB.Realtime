@@ -16,6 +16,19 @@ jobs:
       patchVersion: 0
 
     steps:
+
+    - task: GitVersion@5
+      inputs:
+        runtime: 'full'
+        preferBundledVersion: false
+        updateAssemblyInfo: true
+
+    - script: echo %Action%%BuildVersion%
+      displayName: 'Set build version'
+      env:
+        Action: '##vso[build.updatebuildnumber]'
+        BuildVersion: $(GitVersion.SemVer)
+
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
