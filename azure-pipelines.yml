@@ -5,31 +5,36 @@ jobs:
   - job: windows
     timeoutInMinutes: 20
     pool:
-      vmImage: 'vs2017-win2016'
+      vmImage: 'windows-latest'
 
     variables:
       solution: '**/*.sln'
       buildPlatform: 'Any CPU'
       buildConfiguration: 'Release'
+      majorVersion: 1
+      minorVersion: 0
+      patchVersion: 0
 
     steps:
 
-    - task: NuGetToolInstaller@0
+    - task: GitVersion@5
       inputs:
-        versionSpec: '4.9.4'
+        runtime: 'full'
+        preferBundledVersion: false
+        updateAssemblyInfo: true
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet restore
-      inputs:
-        command: 'restore'
-        projects: '$(solution)'
+    - script: echo %Action%%BuildVersion%
+      displayName: 'Set build version'
+      env:
+        Action: '##vso[build.updatebuildnumber]'
+        BuildVersion: $(GitVersion.SemVer)
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet build
+    - task: VSBuild@1
       inputs:
-        command: 'build'
-        projects: '$(solution)'
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
+        msbuildArgs: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
 
     - task: DotNetCoreCLI@2
       displayName: dotnet test
@@ -49,7 +54,14 @@ jobs:
         command: 'pack'
         packagesToPack: '**/*.csproj'
         nobuild: true
+        includesymbols: true
         versioningScheme: 'byPrereleaseNumber'
-        majorVersion: '1'
-        minorVersion: '0'
-        patchVersion: '0'
+        majorVersion: '$(majorVersion)'
+        minorVersion: '$(minorVersion)'
+        patchVersion: '$(patchVersion)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'artifacts'
+        publishLocation: 'Container'
