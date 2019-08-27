@@ -11,9 +11,6 @@ jobs:
       solution: '**/*.sln'
       buildPlatform: 'Any CPU'
       buildConfiguration: 'Release'
-      majorVersion: 1
-      minorVersion: 0
-      patchVersion: 0
 
     steps:
 
@@ -55,10 +52,6 @@ jobs:
         packagesToPack: '**/*.csproj'
         nobuild: true
         includesymbols: true
-        versioningScheme: 'byPrereleaseNumber'
-        majorVersion: '$(majorVersion)'
-        minorVersion: '$(minorVersion)'
-        patchVersion: '$(patchVersion)'
 
     - task: PublishBuildArtifacts@1
       inputs:

@@ -1,7 +1,7 @@
-assembly-versioning-scheme: MajorMinorPatch
+next-version: 0.1.0
+assembly-versioning-scheme: MajorMinorPatchTag
 mode: ContinuousDelivery
 branches: {}
 ignore:
   sha: []
 merge-message-formats: {}
-}
