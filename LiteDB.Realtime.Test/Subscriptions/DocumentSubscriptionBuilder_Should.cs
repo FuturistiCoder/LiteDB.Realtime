@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using LiteDB.Realtime.Subscriptions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace LiteDB.Realtime.Test.Subscriptions

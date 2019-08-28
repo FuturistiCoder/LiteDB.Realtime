@@ -3,10 +3,7 @@ using LiteDB.Engine;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace LiteDB.Realtime.Test.Database
@@ -26,8 +23,9 @@ namespace LiteDB.Realtime.Test.Database
             var fileName = Path.GetTempPath() + Path.GetRandomFileName();
             new RealtimeLiteDatabase(fileName);
 
-            new RealtimeLiteDatabase(new ConnectionString {
-               Filename = fileName
+            new RealtimeLiteDatabase(new ConnectionString
+            {
+                Filename = fileName
             });
 
             new RealtimeLiteDatabase(new MemoryStream { });
@@ -163,7 +161,7 @@ namespace LiteDB.Realtime.Test.Database
                 receivedItems[0].Price.Should().Be(newItem.Price);
 
                 // update with expression (will broadcast)
-                int updatedNum = db.GetCollection<Item>("items").UpdateMany(item =>  new Item { Id = item.Id, Name = item.Name, Price = item.Price * 2 }, i => i.Price > 0);
+                int updatedNum = db.GetCollection<Item>("items").UpdateMany(item => new Item { Id = item.Id, Name = item.Name, Price = item.Price * 2 }, i => i.Price > 0);
                 updatedNum.Should().Be(1);
 
                 // waiting for notification

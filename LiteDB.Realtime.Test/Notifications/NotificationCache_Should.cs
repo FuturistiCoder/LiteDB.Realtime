@@ -69,7 +69,7 @@ namespace LiteDB.Realtime.Test.Notifications
 
         [Fact]
         public void Add_Collection_Notification_When_Adding_Document_Notification()
-        { 
+        {
             var cache = new NotificationCache();
             cache.Documents.Should().BeEmpty();
 

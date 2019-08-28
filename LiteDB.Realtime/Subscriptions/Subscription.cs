@@ -1,15 +1,12 @@
-﻿using LiteDB.Engine;
-using System;
-using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LiteDB.Realtime.Subscriptions
 {
     internal class Subscription<T> : ISubscription where T : class
     {
-        private LiteDatabase _database;
+        private readonly LiteDatabase _database;
         public string Collection { get; set; }
         public BsonValue Id { get; set; }
         public Type Type => typeof(T);

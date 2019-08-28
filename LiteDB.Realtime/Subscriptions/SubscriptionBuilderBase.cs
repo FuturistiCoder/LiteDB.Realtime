@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LiteDB.Realtime.Subscriptions
+﻿namespace LiteDB.Realtime.Subscriptions
 {
     internal class SubscriptionBuilderBase<T> : ISubscriptionBuilderBase where T : class
     {

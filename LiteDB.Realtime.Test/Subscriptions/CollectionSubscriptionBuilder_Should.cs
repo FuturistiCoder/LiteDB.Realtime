@@ -1,10 +1,5 @@
 ﻿using FluentAssertions;
 using LiteDB.Realtime.Subscriptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using Xunit;
 
 namespace LiteDB.Realtime.Test.Subscriptions
