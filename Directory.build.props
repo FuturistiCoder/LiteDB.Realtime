@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <PackageId>LiteDB.Realtime</PackageId>
     <Authors>Futuristic Coder</Authors>
     <Product>LiteDB.Realtime</Product>
     <Description>LiteDB.Realtime - A realtime LiteDB</Description>
