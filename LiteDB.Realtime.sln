@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteDB.Realtime", "LiteDB.Realtime\LiteDB.Realtime.csproj", "{A1F0E920-6DFD-44F3-B455-22738A9E3BFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteDB.Realtime.Test", "LiteDB.Realtime.Test\LiteDB.Realtime.Test.csproj", "{215785A5-8A5C-484A-BD76-72F9DA74D6AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteDB.Realtime.Test", "LiteDB.Realtime.Test\LiteDB.Realtime.Test.csproj", "{215785A5-8A5C-484A-BD76-72F9DA74D6AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BB9EC6E-4D57-4B7B-8586-046119D5DDD8}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.build.props = Directory.build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <PackageId>LiteDB.Realtime</PackageId>
+    <Authors>Futuristic Coder</Authors>
+    <Product>LiteDB.Realtime</Product>
+    <Description>LiteDB.Realtime - A realtime LiteDB</Description>
+    <Copyright>MIT</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Title>LiteDB.Realtime</Title>
+    <PackageTags>database nosql embedded realtime</PackageTags>
+    <PackageIconUrl>http://www.litedb.org/img/logo_64x64.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/FuturistiCoder/LiteDB.Realtime</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/FuturistiCoder/LiteDB.Realtime/raw/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/FuturistiCoder/LiteDB.Realtime</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+</Project>
