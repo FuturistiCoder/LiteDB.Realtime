@@ -12,8 +12,7 @@ strategy:
 
 pool:
   vmImage: '$(imageName)'
-
-timeoutInMinutes: 20
+  timeoutInMinutes: 20
 
 variables:
   solution: '**/*.sln'
