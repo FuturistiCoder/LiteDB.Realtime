@@ -38,7 +38,7 @@ jobs:
       inputs:
         command: 'test'
         publishTestResults: true
-        arguments: '-c $(buildConfiguration) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:ExcludeByAttribute="Obsolete,GeneratedCode,CompilerGenerated"'
+        arguments: -c $(buildConfiguration) --no-build /p:CollectCoverage=true;CoverletOutputFormat=cobertura;ExcludeByAttribute=Obsolete%2cGeneratedCode%2cCompilerGenerated
 
     - task: PublishCodeCoverageResults@1
       inputs:
