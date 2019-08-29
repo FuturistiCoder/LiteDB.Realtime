@@ -31,12 +31,14 @@ steps:
       runtime: 'full'
       preferBundledVersion: false
       updateAssemblyInfo: true
+    condition: eq(variables['imageName'], 'windows-latest')
 
   - script: echo %Action%%BuildVersion%
     displayName: 'Set build version'
     env:
       Action: '##vso[build.updatebuildnumber]'
       BuildVersion: $(GitVersion.SemVer)
+    condition: eq(variables['imageName'], 'windows-latest')
 
   - task: DotNetCoreCLI@2
     displayName: dotnet build
