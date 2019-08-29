@@ -21,6 +21,12 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '3.0.100-preview8-013656'
+      includePreviewVersions: true
+
   - task: GitVersion@5
     inputs:
       runtime: 'full'
@@ -33,12 +39,12 @@ steps:
       Action: '##vso[build.updatebuildnumber]'
       BuildVersion: $(GitVersion.SemVer)
 
-  - task: VSBuild@1
+  - task: DotNetCoreCLI@2
+    displayName: dotnet build
     inputs:
-      solution: '$(solution)'
-      platform: '$(buildPlatform)'
-      configuration: '$(buildConfiguration)'
-      msbuildArgs: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+      command: 'build'
+      projects: '$(solution)'
+      arguments: '-c $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
     displayName: dotnet test
