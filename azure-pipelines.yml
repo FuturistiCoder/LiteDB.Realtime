@@ -1,66 +1,74 @@
 trigger:
 - master
 
-jobs:
-  - job: windows
-    timeoutInMinutes: 20
-    pool:
-      vmImage: 'windows-latest'
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-latest'
+    mac:
+      imageName: 'macos-latest'
+    windows:
+      imageName: 'windows-latest'
 
-    variables:
-      solution: '**/*.sln'
-      buildPlatform: 'Any CPU'
-      buildConfiguration: 'Release'
+pool:
+  vmImage: '$(imageName)'
+  timeoutInMinutes: 20
 
-    steps:
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-    - task: UseDotNet@2
-      inputs:
-        packageType: 'sdk'
-        version: '3.0.100-preview8-013656'
-        includePreviewVersions: true
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '3.0.100-preview8-013656'
+      includePreviewVersions: true
 
-    - task: GitVersion@5
-      inputs:
-        runtime: 'full'
-        preferBundledVersion: false
-        updateAssemblyInfo: true
+  - task: GitVersion@5
+    inputs:
+      runtime: 'full'
+      preferBundledVersion: false
+      updateAssemblyInfo: true
+    condition: eq(variables['imageName'], 'windows-latest')
 
-    - script: echo %Action%%BuildVersion%
-      displayName: 'Set build version'
-      env:
-        Action: '##vso[build.updatebuildnumber]'
-        BuildVersion: $(GitVersion.SemVer)
+  - script: echo %Action%%BuildVersion%
+    displayName: 'Set build version'
+    env:
+      Action: '##vso[build.updatebuildnumber]'
+      BuildVersion: $(GitVersion.SemVer)
+    condition: eq(variables['imageName'], 'windows-latest')
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet build
-      inputs:
-        command: 'build'
-        projects: '$(solution)'
-        arguments: '-c $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: dotnet build
+    inputs:
+      command: 'build'
+      projects: '$(solution)'
+      arguments: '-c $(buildConfiguration)'
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet test
-      inputs:
-        command: 'test'
-        publishTestResults: true
-        arguments: -c $(buildConfiguration) --no-build /p:CollectCoverage=true;CoverletOutputFormat=cobertura;ExcludeByAttribute=Obsolete%2cGeneratedCode%2cCompilerGenerated
+  - task: DotNetCoreCLI@2
+    displayName: dotnet test
+    inputs:
+      command: 'test'
+      publishTestResults: true
+      arguments: -c $(buildConfiguration) --no-build /p:CollectCoverage=true;CoverletOutputFormat=cobertura;ExcludeByAttribute=Obsolete%2cGeneratedCode%2cCompilerGenerated
 
-    - task: PublishCodeCoverageResults@1
-      inputs:
-        codeCoverageTool: 'Cobertura'
-        summaryFileLocation: '**/*.cobertura.xml'
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '**/*.cobertura.xml'
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet pack
-      inputs:
-        command: 'pack'
-        packagesToPack: '**/*.csproj'
-        nobuild: true
-        includesymbols: true
+  - task: DotNetCoreCLI@2
+    displayName: dotnet pack
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/*.csproj'
+      nobuild: true
+      includesymbols: true
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'artifacts'
-        publishLocation: 'Container'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'artifacts'
+      publishLocation: 'Container'
