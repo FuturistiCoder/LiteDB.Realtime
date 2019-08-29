@@ -1,60 +1,67 @@
 trigger:
 - master
 
-jobs:
-  - job: windows
-    timeoutInMinutes: 20
-    pool:
-      vmImage: 'windows-latest'
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-latest'
+    mac:
+      imageName: 'macos-latest'
+    windows:
+      imageName: 'windows-latest'
 
-    variables:
-      solution: '**/*.sln'
-      buildPlatform: 'Any CPU'
-      buildConfiguration: 'Release'
+pool:
+  vmImage: '$(imageName)'
 
-    steps:
+timeoutInMinutes: 20
 
-    - task: GitVersion@5
-      inputs:
-        runtime: 'full'
-        preferBundledVersion: false
-        updateAssemblyInfo: true
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-    - script: echo %Action%%BuildVersion%
-      displayName: 'Set build version'
-      env:
-        Action: '##vso[build.updatebuildnumber]'
-        BuildVersion: $(GitVersion.SemVer)
+steps:
+  - task: GitVersion@5
+    inputs:
+      runtime: 'full'
+      preferBundledVersion: false
+      updateAssemblyInfo: true
 
-    - task: VSBuild@1
-      inputs:
-        solution: '$(solution)'
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-        msbuildArgs: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+  - script: echo %Action%%BuildVersion%
+    displayName: 'Set build version'
+    env:
+      Action: '##vso[build.updatebuildnumber]'
+      BuildVersion: $(GitVersion.SemVer)
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet test
-      inputs:
-        command: 'test'
-        publishTestResults: true
-        arguments: -c $(buildConfiguration) --no-build /p:CollectCoverage=true;CoverletOutputFormat=cobertura;ExcludeByAttribute=Obsolete%2cGeneratedCode%2cCompilerGenerated
+  - task: VSBuild@1
+    inputs:
+      solution: '$(solution)'
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
+      msbuildArgs: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
 
-    - task: PublishCodeCoverageResults@1
-      inputs:
-        codeCoverageTool: 'Cobertura'
-        summaryFileLocation: '**/*.cobertura.xml'
+  - task: DotNetCoreCLI@2
+    displayName: dotnet test
+    inputs:
+      command: 'test'
+      publishTestResults: true
+      arguments: -c $(buildConfiguration) --no-build /p:CollectCoverage=true;CoverletOutputFormat=cobertura;ExcludeByAttribute=Obsolete%2cGeneratedCode%2cCompilerGenerated
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet pack
-      inputs:
-        command: 'pack'
-        packagesToPack: '**/*.csproj'
-        nobuild: true
-        includesymbols: true
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '**/*.cobertura.xml'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'artifacts'
-        publishLocation: 'Container'
+  - task: DotNetCoreCLI@2
+    displayName: dotnet pack
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/*.csproj'
+      nobuild: true
+      includesymbols: true
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'artifacts'
+      publishLocation: 'Container'
