@@ -29,9 +29,7 @@ namespace LiteDB.Realtime.Subscriptions
             }
             else
             {
-                var nextValue = _database.GetCollection<T>(Collection).Query()
-                    .Where("_id = @0", Id)
-                    .SingleOrDefault();
+                var nextValue = _database.GetCollection<T>(Collection).FindById(Id);
                 Task.Run(() => AsDocumentObserver()?.OnNext(nextValue));
             }
         }

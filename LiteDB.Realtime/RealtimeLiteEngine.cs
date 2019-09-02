@@ -119,7 +119,7 @@ namespace LiteDB.Realtime
         {
             try
             {
-                _notificationService.Cache.AddCollection(collection);
+                _notificationService.Cache.AddDocuments(collection, docs);
                 var result = _engine.Insert(collection, docs, autoId);
                 _notificationService.Notify();
                 return result;

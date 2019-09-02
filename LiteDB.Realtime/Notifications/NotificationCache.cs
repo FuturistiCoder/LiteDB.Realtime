@@ -77,7 +77,7 @@ namespace LiteDB.Realtime.Notifications
 
             AddCollection(collectionName);
 
-            foreach (var id in ids)
+            foreach (var id in ids.Where(id => !id.IsNull))
             {
                 _documents[(collectionName, id)] = default;
             }
