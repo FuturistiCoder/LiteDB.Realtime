@@ -1,5 +1,10 @@
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - README.md
 
 strategy:
   matrix:
@@ -72,3 +77,4 @@ steps:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'artifacts'
       publishLocation: 'Container'
+    condition: eq(variables['imageName'], 'windows-latest')
