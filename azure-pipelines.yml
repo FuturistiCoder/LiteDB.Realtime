@@ -71,7 +71,7 @@ steps:
       packagesToPack: '**/*.csproj'
       nobuild: true
       includesymbols: true
-      arguments: '/p:SymbolPackageFormat=snupkg'
+      arguments: /p:SymbolPackageFormat=snupkg
 
   - task: PublishBuildArtifacts@1
     inputs:
