@@ -222,5 +222,8 @@ namespace LiteDB.Realtime
                 _notificationService.Clear();
             }
         }
+
+        public long Shrink()
+            => _engine.Shrink();
     }
 }
