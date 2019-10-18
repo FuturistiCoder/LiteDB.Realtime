@@ -1,7 +1,10 @@
-﻿namespace LiteDB.Realtime.Subscriptions
+﻿using System;
+using System.Collections.Generic;
+
+namespace LiteDB.Realtime.Subscriptions
 {
-    public interface ICollectionSubscriptionBuilder
+    public interface ICollectionSubscriptionBuilder<T> : ISubscriptionBuilderBase, IObservable<List<T>> where T : class
     {
-        IDocumentSubscriptionBuilder<T> Collection<T>(string collection) where T : class;
+        IObservable<T> Id(BsonValue id);
     }
 }

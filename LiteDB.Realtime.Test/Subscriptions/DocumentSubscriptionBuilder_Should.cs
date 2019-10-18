@@ -14,26 +14,25 @@ namespace LiteDB.Realtime.Test.Subscriptions
         {
             var collectionName = "testCollection";
             var id = new BsonValue(Guid.NewGuid());
-            var sub = new Subscription<Model>(_db)
+            var collSub = new CollectionSubscription<Model>(_db.NotificationService)
             {
                 Collection = collectionName,
             };
 
-            var builder = new DocumentSubscriptionBuilder<Model>(_db, sub);
-            var observable = builder.Id(id);
+            var collBuilder = new CollectionSubscriptionBuilder<Model>(_db.NotificationService, collSub);
+            var docBuilder = collBuilder.Id(id) as DocumentSubscriptionBuilder<Model>;
+            
 
-            sub.Collection.Should().Be(collectionName);
-            sub.Id.Should().Be(id);
+            var docSub = (docBuilder as ISubscriptionBuilderBase).Subscription as DocumentSubscription<Model>;
+            docSub.Collection.Should().Be(collectionName);
+            docSub.Id.Should().Be(id);
             // before subscribing
-            sub.ObserverObject.Should().BeNull();
+            docSub.Observer.Should().BeNull();
 
-            observable.Subscribe(obj => { });
+            docBuilder.Subscribe(obj => { });
 
             // after subscribing
-            sub.IsCollection.Should().BeFalse();
-            sub.ObserverObject.Should().NotBeNull();
-            sub.AsCollectionObserver().Should().BeNull();
-            sub.AsDocumentObserver().Should().NotBeNull();
+            docSub.Observer.Should().NotBeNull();
         }
 
         [Fact]
@@ -41,24 +40,20 @@ namespace LiteDB.Realtime.Test.Subscriptions
         {
             var collectionName = "testCollection";
             var id = new BsonValue(Guid.NewGuid());
-            var sub = new Subscription<Model>(_db)
+            var sub = new CollectionSubscription<Model>(_db.NotificationService)
             {
                 Collection = collectionName,
             };
 
-            var builder = new DocumentSubscriptionBuilder<Model>(_db, sub);
+            var builder = new CollectionSubscriptionBuilder<Model>(_db.NotificationService, sub);
             sub.Collection.Should().Be(collectionName);
-            sub.Id.Should().BeNull();
             // before subscribing
-            sub.ObserverObject.Should().BeNull();
+            sub.Observer.Should().BeNull();
 
             builder.Subscribe(listObj => { });
 
             // after subscribing
-            sub.IsCollection.Should().BeTrue();
-            sub.ObserverObject.Should().NotBeNull();
-            sub.AsCollectionObserver().Should().NotBeNull();
-            sub.AsDocumentObserver().Should().BeNull();
+            sub.Observer.Should().NotBeNull();
         }
     }
 }

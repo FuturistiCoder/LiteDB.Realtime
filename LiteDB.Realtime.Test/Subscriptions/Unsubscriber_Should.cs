@@ -14,8 +14,8 @@ namespace LiteDB.Realtime.Test.Subscriptions
         public void Unsubscribe_From_DB_When_Disposing()
         {
             var subscriptions = new SubscriptionDict();
-            var sub1 = new Subscription<Model>(_db);
-            var sub2 = new Subscription<Model>(_db);
+            var sub1 = new DocumentSubscription<Model>(_db.NotificationService);
+            var sub2 = new CollectionSubscription<Model>(_db.NotificationService);
             subscriptions.TryAdd(sub1, default);
             subscriptions.TryAdd(sub2, default);
             subscriptions.Keys.Should().HaveCount(2);

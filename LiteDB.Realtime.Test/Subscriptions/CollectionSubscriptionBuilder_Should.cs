@@ -17,14 +17,14 @@ namespace LiteDB.Realtime.Test.Subscriptions
         public void Build_A_Subscription()
         {
             var collectionName = "testCollection";
-            new CollectionSubscriptionBuilder(_db)
+            new SubscriptionBuilder(_db.NotificationService)
                 .Collection<Model>(collectionName)
                 .Subscription
                 .Collection
                 .Should()
                 .Be(collectionName);
 
-            new CollectionSubscriptionBuilder(_db)
+            new SubscriptionBuilder(_db.NotificationService)
                 .Collection<Model>(null)
                 .Subscription
                 .Collection

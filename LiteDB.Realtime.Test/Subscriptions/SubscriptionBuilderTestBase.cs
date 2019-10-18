@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using LiteDB.Realtime.Notifications;
+using System.IO;
 
 namespace LiteDB.Realtime.Test.Subscriptions
 {

@@ -8,7 +8,7 @@ namespace LiteDB.Realtime
     public class RealtimeLiteEngine : ILiteEngine
     {
         private readonly ILiteEngine _engine;
-        internal readonly NotificationService _notificationService = new NotificationService();
+        internal NotificationService NotificationService { get; } = new NotificationService();
 
         internal RealtimeLiteEngine(ILiteEngine engine)
         {
@@ -35,7 +35,7 @@ namespace LiteDB.Realtime
             var success = _engine.Commit();
             if (success)
             {
-                _notificationService.Notify();
+                NotificationService.Notify();
             }
 
             return success;
@@ -46,9 +46,9 @@ namespace LiteDB.Realtime
         {
             try
             {
-                _notificationService.Cache.AddDocuments(collection, ids);
+                NotificationService.Cache.AddDocuments(collection, ids);
                 var result = _engine.Delete(collection, ids);
-                _notificationService.Notify();
+                NotificationService.Notify();
                 return result;
             }
             catch (Exception ex)
@@ -57,7 +57,7 @@ namespace LiteDB.Realtime
             }
             finally
             {
-                _notificationService.Clear();
+                NotificationService.Clear();
             }
         }
 
@@ -65,9 +65,9 @@ namespace LiteDB.Realtime
         {
             try
             {
-                _notificationService.Cache.AddBroadcast(collection);
+                NotificationService.Cache.AddBroadcast(collection);
                 var result = _engine.DeleteMany(collection, predicate);
-                _notificationService.Notify();
+                NotificationService.Notify();
                 return result;
             }
             catch (Exception ex)
@@ -76,13 +76,13 @@ namespace LiteDB.Realtime
             }
             finally
             {
-                _notificationService.Clear();
+                NotificationService.Clear();
             }
         }
 
         public void Dispose()
         {
-            _notificationService.Clear();
+            NotificationService.Clear();
             _engine.Dispose();
         }
 
@@ -90,9 +90,9 @@ namespace LiteDB.Realtime
         {
             try
             {
-                _notificationService.Cache.AddBroadcast(name);
+                NotificationService.Cache.AddBroadcast(name);
                 var result = _engine.DropCollection(name);
-                _notificationService.Notify();
+                NotificationService.Notify();
                 return result;
             }
             catch (Exception ex)
@@ -101,7 +101,7 @@ namespace LiteDB.Realtime
             }
             finally
             {
-                _notificationService.Clear();
+                NotificationService.Clear();
             }
         }
 
@@ -119,9 +119,9 @@ namespace LiteDB.Realtime
         {
             try
             {
-                _notificationService.Cache.AddDocuments(collection, docs);
+                NotificationService.Cache.AddDocuments(collection, docs);
                 var result = _engine.Insert(collection, docs, autoId);
-                _notificationService.Notify();
+                NotificationService.Notify();
                 return result;
             }
             catch (Exception ex)
@@ -130,7 +130,7 @@ namespace LiteDB.Realtime
             }
             finally
             {
-                _notificationService.Clear();
+                NotificationService.Clear();
             }
         }
 
@@ -144,10 +144,10 @@ namespace LiteDB.Realtime
 
             try
             {
-                _notificationService.Cache.AddBroadcast(name);
-                _notificationService.Cache.AddBroadcast(newName);
+                NotificationService.Cache.AddBroadcast(name);
+                NotificationService.Cache.AddBroadcast(newName);
                 var result = _engine.RenameCollection(name, newName);
-                _notificationService.Notify();
+                NotificationService.Notify();
                 return result;
             }
             catch (Exception ex)
@@ -156,13 +156,13 @@ namespace LiteDB.Realtime
             }
             finally
             {
-                _notificationService.Clear();
+                NotificationService.Clear();
             }
         }
 
         public bool Rollback()
         {
-            _notificationService.Clear();
+            NotificationService.Clear();
             return _engine.Rollback();
         }
 
@@ -170,9 +170,9 @@ namespace LiteDB.Realtime
         {
             try
             {
-                _notificationService.Cache.AddDocuments(collection, docs);
+                NotificationService.Cache.AddDocuments(collection, docs);
                 var result = _engine.Update(collection, docs);
-                _notificationService.Notify();
+                NotificationService.Notify();
                 return result;
             }
             catch (Exception ex)
@@ -181,7 +181,7 @@ namespace LiteDB.Realtime
             }
             finally
             {
-                _notificationService.Clear();
+                NotificationService.Clear();
             }
         }
 
@@ -189,9 +189,9 @@ namespace LiteDB.Realtime
         {
             try
             {
-                _notificationService.Cache.AddBroadcast(collection);
+                NotificationService.Cache.AddBroadcast(collection);
                 var result = _engine.UpdateMany(collection, extend, predicate);
-                _notificationService.Notify();
+                NotificationService.Notify();
                 return result;
             }
             catch (Exception ex)
@@ -200,7 +200,7 @@ namespace LiteDB.Realtime
             }
             finally
             {
-                _notificationService.Clear();
+                NotificationService.Clear();
             }
         }
 
@@ -208,9 +208,9 @@ namespace LiteDB.Realtime
         {
             try
             {
-                _notificationService.Cache.AddDocuments(collection, docs);
+                NotificationService.Cache.AddDocuments(collection, docs);
                 var result = _engine.Upsert(collection, docs, autoId);
-                _notificationService.Notify();
+                NotificationService.Notify();
                 return result;
             }
             catch (Exception ex)
@@ -219,7 +219,7 @@ namespace LiteDB.Realtime
             }
             finally
             {
-                _notificationService.Clear();
+                NotificationService.Clear();
             }
         }
 

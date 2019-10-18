@@ -1,15 +1,21 @@
-﻿namespace LiteDB.Realtime.Subscriptions
+﻿using System;
+using LiteDB.Realtime.Notifications;
+
+namespace LiteDB.Realtime.Subscriptions
 {
     internal class SubscriptionBuilderBase<T> : ISubscriptionBuilderBase where T : class
     {
-        protected readonly RealtimeLiteDatabase _database;
-        protected readonly Subscription<T> _subscription;
-        public SubscriptionBuilderBase(RealtimeLiteDatabase database, Subscription<T> subscription)
+        protected readonly NotificationService _notificationService;
+        protected SubscriptionBase<T> _subscriptionBase;
+        public SubscriptionBuilderBase(NotificationService notificationService, SubscriptionBase<T> subscription)
         {
-            _database = database;
-            _subscription = subscription;
+            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+            _subscriptionBase = subscription ?? throw new ArgumentNullException(nameof(subscription));
         }
 
-        ISubscription ISubscriptionBuilderBase.Subscription => _subscription;
+        /// <summary>
+        /// UnitTest Purpose
+        /// </summary>
+        ISubscription ISubscriptionBuilderBase.Subscription => _subscriptionBase;
     }
 }

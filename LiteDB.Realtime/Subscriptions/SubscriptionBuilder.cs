@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
+using LiteDB.Realtime.Notifications;
 
 namespace LiteDB.Realtime.Subscriptions
 {
-    internal class SubscriptionBuilder<T> : SubscriptionBuilderBase<T>, IObservable<T> where T : class
+    internal class SubscriptionBuilder : ISubscriptionBuilder
     {
-        public SubscriptionBuilder(RealtimeLiteDatabase database, Subscription<T> subscription) : base(database, subscription)
+        private readonly NotificationService _notificationService;
+
+        public SubscriptionBuilder(NotificationService notificationService)
         {
+            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
-        public IDisposable Subscribe(IObserver<List<T>> observer)
+        public ICollectionSubscriptionBuilder<T> Collection<T>(string collection) where T : class
         {
-            _subscription.IsCollection = true;
-            _subscription.ObserverObject = observer;
-            var disposable = _database.Subscribe(_subscription);
-            _subscription.OnNext();
-            return disposable;
-        }
-
-        public IDisposable Subscribe(IObserver<T> observer)
-        {
-            _subscription.ObserverObject = observer;
-            var disposable = _database.Subscribe(_subscription);
-            _subscription.OnNext();
-            return disposable;
+            var subscription = new CollectionSubscription<T>(_notificationService)
+            {
+                Collection = collection
+            };
+            return new CollectionSubscriptionBuilder<T>(_notificationService, subscription);
         }
     }
 }

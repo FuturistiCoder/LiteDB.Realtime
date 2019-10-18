@@ -1,21 +1,35 @@
-﻿namespace LiteDB.Realtime.Subscriptions
-{
-    internal class CollectionSubscriptionBuilder : ICollectionSubscriptionBuilder
-    {
-        private readonly RealtimeLiteDatabase _database;
+﻿using LiteDB.Realtime.Notifications;
+using System;
+using System.Collections.Generic;
 
-        public CollectionSubscriptionBuilder(RealtimeLiteDatabase database)
+namespace LiteDB.Realtime.Subscriptions
+{
+    internal class CollectionSubscriptionBuilder<T> : SubscriptionBuilderBase<T>, ICollectionSubscriptionBuilder<T> where T : class
+    {
+        private readonly CollectionSubscription<T> _subscription;
+
+        public CollectionSubscriptionBuilder(NotificationService notificationService, CollectionSubscription<T> subscription)
+            : base(notificationService, subscription)
         {
-            _database = database;
+            _subscription = subscription ?? throw new NullReferenceException(nameof(subscription));
         }
 
-        public IDocumentSubscriptionBuilder<T> Collection<T>(string collection) where T : class
+        public IObservable<T> Id(BsonValue id)
         {
-            var subscription = new Subscription<T>(_database)
+            var documentSubscription = new DocumentSubscription<T>(_notificationService)
             {
-                Collection = collection
+                Id = id,
+                Collection = _subscription.Collection
             };
-            return new DocumentSubscriptionBuilder<T>(_database, subscription);
+            return new DocumentSubscriptionBuilder<T>(_notificationService, documentSubscription);
+        }
+
+        public IDisposable Subscribe(IObserver<List<T>> observer)
+        {
+            _subscription.Observer = observer;
+            var disposable = _notificationService.Subscribe(_subscription);
+            _notificationService.Notify(_subscription);
+            return disposable;
         }
     }
 }
