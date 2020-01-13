@@ -8,6 +8,7 @@ namespace LiteDB.Realtime.Subscriptions
     {
         private readonly Subscriptions _subscriptions;
         private readonly ISubscription _subscription;
+        private bool _isDisposed = false;
 
         internal Unsubscriber(Subscriptions subscriptions, ISubscription subscription)
         {
@@ -16,10 +17,20 @@ namespace LiteDB.Realtime.Subscriptions
         }
         public void Dispose()
         {
+            if (_isDisposed) return;
+
             if (_subscriptions.ContainsKey(_subscription))
             {
                 _subscriptions.TryRemove(_subscription, out _);
             }
+
+            _isDisposed = true;
+            GC.SuppressFinalize(this);
+        }
+
+        ~Unsubscriber()
+        {
+            Dispose();
         }
     }
 }
