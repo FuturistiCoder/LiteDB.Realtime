@@ -42,6 +42,7 @@ namespace LiteDB.Realtime.Test.Database
             // collection subscription
             db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
 
+
             //waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
             receivedItems.Should().BeEmpty();
@@ -60,6 +61,52 @@ namespace LiteDB.Realtime.Test.Database
             receivedItems.Should().NotBeNull();
             receivedItems.Should().HaveCount(1);
             receivedItems[0].Id.Should().Be(newId.AsGuid);
+            receivedItems[0].Name.Should().Be(newItem.Name);
+            receivedItems[0].Price.Should().Be(newItem.Price);
+        }
+
+        [Fact]
+        public void Notify_Collection_Subscription_When_A_Data_Upserted()
+        {
+            using var db = new RealtimeLiteDatabase(new MemoryStream());
+            List<Item> receivedItems = null;
+            // collection subscription
+            db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+
+
+            //waiting for notification
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            receivedItems.Should().BeEmpty();
+
+            var newItem = new Item
+            {
+                Id = Guid.NewGuid(),
+                Name = "Keyboard",
+                Price = 100m
+            };
+            bool isInsert = db.GetCollection<Item>("items").Upsert(newItem);
+            isInsert.Should().BeTrue();
+
+            // waiting for notification
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            receivedItems.Should().NotBeNull();
+            receivedItems.Should().HaveCount(1);
+            receivedItems[0].Id.Should().Be(newItem.Id);
+            receivedItems[0].Name.Should().Be(newItem.Name);
+            receivedItems[0].Price.Should().Be(newItem.Price);
+
+            // update item
+            newItem.Price = 99m;
+            isInsert = db.GetCollection<Item>("items").Upsert(newItem);
+            isInsert.Should().BeFalse();
+
+            // waiting for notification
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            receivedItems.Should().NotBeNull();
+            receivedItems.Should().HaveCount(1);
+            receivedItems[0].Id.Should().Be(newItem.Id);
             receivedItems[0].Name.Should().Be(newItem.Name);
             receivedItems[0].Price.Should().Be(newItem.Price);
         }
