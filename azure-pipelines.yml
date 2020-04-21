@@ -30,10 +30,9 @@ steps:
       packageType: 'sdk'
       version: '3.0.x'
 
-  - task: GitVersion@5
+  - task: UseGitVersion@5
     inputs:
-      runtime: 'full'
-      preferBundledVersion: false
+      versionSpec: '5.x'
       updateAssemblyInfo: true
     condition: eq(variables['imageName'], 'windows-latest')
 
