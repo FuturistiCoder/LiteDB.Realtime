@@ -34,7 +34,7 @@ steps:
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
-      version: '3.0.x'
+      version: '3.1.x'
 
   - script: echo %Action%%BuildVersion%
     displayName: 'Set build version'
@@ -48,7 +48,7 @@ steps:
     inputs:
       command: 'build'
       projects: '$(solution)'
-      arguments: '-c $(buildConfiguration)'
+      arguments: '-c $(buildConfiguration) -p:Version=$(GitVersion.SemVer)'
 
   - task: DotNetCoreCLI@2
     displayName: dotnet test
@@ -69,7 +69,7 @@ steps:
       packagesToPack: '**/*.csproj'
       nobuild: true
       includesymbols: true
-      arguments: /p:SymbolPackageFormat=snupkg
+      buildProperties: SymbolPackageFormat=snupkg;Version=$(GitVersion.SemVer)
 
   - task: PublishBuildArtifacts@1
     inputs:
