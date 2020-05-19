@@ -1,5 +1,5 @@
-﻿using System;
-using LiteDB.Realtime.Notifications;
+﻿using LiteDB.Realtime.Notifications;
+using System;
 
 namespace LiteDB.Realtime.Subscriptions
 {
@@ -7,6 +7,7 @@ namespace LiteDB.Realtime.Subscriptions
     {
         protected readonly NotificationService _notificationService;
         protected SubscriptionBase<T> _subscriptionBase;
+
         public SubscriptionBuilderBase(NotificationService notificationService, SubscriptionBase<T> subscription)
         {
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));

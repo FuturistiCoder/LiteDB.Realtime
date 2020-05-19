@@ -101,7 +101,6 @@ namespace LiteDB.Realtime.Test.Notifications
             cache.Documents.Should().HaveCount(2);
         }
 
-
         [Fact]
         public void Not_Add_The_Collection_Notification_If_It_Matches_With_Any_Broadcast()
         {

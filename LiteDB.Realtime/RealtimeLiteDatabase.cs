@@ -3,12 +3,10 @@ using LiteDB.Realtime.Helpers;
 using LiteDB.Realtime.Notifications;
 using LiteDB.Realtime.Subscriptions;
 using System;
-using System.Collections.Concurrent;
 using System.IO;
 
 namespace LiteDB.Realtime
 {
-
     public class RealtimeLiteDatabase : LiteDatabase
     {
         private readonly RealtimeLiteEngine _engine;
@@ -23,6 +21,7 @@ namespace LiteDB.Realtime
             : this(connectionString.CreateRealtimeEngine(), mapper)
         {
         }
+
         public RealtimeLiteDatabase(Stream stream, BsonMapper? mapper = null)
             : this(stream.CreateRealtimeEngine(), mapper)
         {
@@ -41,7 +40,6 @@ namespace LiteDB.Realtime
                 throw new NotSupportedException();
             }
         }
-
 
         public ISubscriptionBuilder Realtime => _engine.NotificationService.SubscriptionBuilder();
     }

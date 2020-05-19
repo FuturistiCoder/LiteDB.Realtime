@@ -7,7 +7,8 @@ namespace LiteDB.Realtime.Test.Subscriptions
 {
     public class DocumentSubscriptionBuilder_Should : SubscriptionBuilderTestBase
     {
-        class Model { }
+        private class Model
+        { }
 
         [Fact]
         public void Build_A_Document_Subscription()
@@ -21,7 +22,6 @@ namespace LiteDB.Realtime.Test.Subscriptions
 
             var collBuilder = new CollectionSubscriptionBuilder<Model>(_db.NotificationService, collSub);
             var docBuilder = collBuilder.Id(id) as DocumentSubscriptionBuilder<Model>;
-            
 
             var docSub = (docBuilder as ISubscriptionBuilderBase).Subscription as DocumentSubscription<Model>;
             docSub.Collection.Should().Be(collectionName);

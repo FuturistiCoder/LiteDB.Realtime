@@ -29,7 +29,6 @@ namespace LiteDB.Realtime
             }
 
             return success;
-
         }
 
         public int Delete(string collection, IEnumerable<BsonValue> ids)
@@ -131,7 +130,6 @@ namespace LiteDB.Realtime
 
         public bool RenameCollection(string name, string newName)
         {
-
             try
             {
                 NotificationService.Cache.AddBroadcast(name);

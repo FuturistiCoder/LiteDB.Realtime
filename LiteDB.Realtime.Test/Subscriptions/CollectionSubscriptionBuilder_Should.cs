@@ -6,7 +6,8 @@ namespace LiteDB.Realtime.Test.Subscriptions
 {
     public class CollectionSubscriptionBuilder_Should : SubscriptionBuilderTestBase
     {
-        class Model { }
+        private class Model
+        { }
 
         public CollectionSubscriptionBuilder_Should()
             : base()

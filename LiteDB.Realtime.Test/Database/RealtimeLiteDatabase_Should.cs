@@ -10,12 +10,11 @@ namespace LiteDB.Realtime.Test.Database
 {
     public class RealtimeLiteDatabase_Should
     {
-        class Item
+        private class Item
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
             public decimal Price { get; set; }
-
         }
 
         [Fact]
@@ -50,7 +49,6 @@ namespace LiteDB.Realtime.Test.Database
             // collection subscription
             db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
 
-
             //waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
             receivedItems.Should().BeEmpty();
@@ -80,7 +78,6 @@ namespace LiteDB.Realtime.Test.Database
             List<Item> receivedItems = null;
             // collection subscription
             db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
-
 
             //waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -244,7 +241,6 @@ namespace LiteDB.Realtime.Test.Database
 
             isNull.Should().BeTrue();
         }
-
 
         [Fact]
         public void Notify_Document_When_A_New_Data_Added()

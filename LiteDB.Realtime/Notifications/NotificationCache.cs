@@ -11,12 +11,15 @@ namespace LiteDB.Realtime.Notifications
         /// CollectionName, _
         /// </summary>
         private readonly ConcurrentDictionary<string, byte> _broadcasts = new ConcurrentDictionary<string, byte>();
+
         public ICollection<string> Broadcasts => _broadcasts.Keys;
+
         /// <summary>
         /// Collection notifications
         /// CollectionName, _
         /// </summary>
         private readonly ConcurrentDictionary<string, byte> _collections = new ConcurrentDictionary<string, byte>();
+
         public ICollection<string> Collections => _collections.Keys;
 
         /// <summary>
@@ -24,6 +27,7 @@ namespace LiteDB.Realtime.Notifications
         /// (CollectionName, _id), _
         /// </summary>
         private readonly ConcurrentDictionary<(string, BsonValue), byte> _documents = new ConcurrentDictionary<(string, BsonValue), byte>();
+
         public ICollection<(string, BsonValue)> Documents => _documents.Keys;
 
         /// <summary>

@@ -1,5 +1,5 @@
-﻿using System;
-using LiteDB.Realtime.Notifications;
+﻿using LiteDB.Realtime.Notifications;
+using System;
 
 namespace LiteDB.Realtime.Subscriptions
 {
@@ -7,6 +7,7 @@ namespace LiteDB.Realtime.Subscriptions
     {
         string Collection { get; }
         Type Type { get; }
+
         void OnNextIfNeeded(NotificationCache copy);
     }
 }

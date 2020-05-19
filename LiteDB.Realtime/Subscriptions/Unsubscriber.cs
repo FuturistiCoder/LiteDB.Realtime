@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 namespace LiteDB.Realtime.Subscriptions
 {
     using Subscriptions = ConcurrentDictionary<ISubscription, byte>;
+
     internal class Unsubscriber : IDisposable
     {
         private readonly Subscriptions _subscriptions;
@@ -15,6 +16,7 @@ namespace LiteDB.Realtime.Subscriptions
             _subscriptions = subscriptions;
             _subscription = subscription;
         }
+
         public void Dispose()
         {
             if (_isDisposed) return;

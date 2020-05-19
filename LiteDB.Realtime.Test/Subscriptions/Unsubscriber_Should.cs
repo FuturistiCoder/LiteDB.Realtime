@@ -6,9 +6,11 @@ using Xunit;
 namespace LiteDB.Realtime.Test.Subscriptions
 {
     using SubscriptionDict = ConcurrentDictionary<ISubscription, byte>;
+
     public class Unsubscriber_Should : SubscriptionBuilderTestBase
     {
-        class Model { }
+        private class Model
+        { }
 
         [Fact]
         public void Unsubscribe_From_DB_When_Disposing()

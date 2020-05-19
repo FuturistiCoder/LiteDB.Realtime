@@ -1,5 +1,5 @@
-﻿using System;
-using LiteDB.Realtime.Notifications;
+﻿using LiteDB.Realtime.Notifications;
+using System;
 
 namespace LiteDB.Realtime.Subscriptions
 {

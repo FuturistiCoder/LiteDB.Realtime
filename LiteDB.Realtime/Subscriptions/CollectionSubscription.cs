@@ -1,8 +1,6 @@
 ﻿using LiteDB.Realtime.Notifications;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LiteDB.Realtime.Subscriptions
 {

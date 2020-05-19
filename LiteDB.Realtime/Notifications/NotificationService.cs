@@ -1,12 +1,12 @@
 ﻿using LiteDB.Realtime.Subscriptions;
 using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LiteDB.Realtime.Notifications
 {
     using Subscriptions = ConcurrentDictionary<ISubscription, byte>;
+
     internal class NotificationService
     {
         public NotificationCache Cache { get; private set; } = new NotificationCache();
@@ -19,9 +19,7 @@ namespace LiteDB.Realtime.Notifications
             _database = database ?? throw new ArgumentNullException(nameof(database));
         }
 
-
         public SubscriptionBuilder SubscriptionBuilder() => new SubscriptionBuilder(this);
-
 
         internal void NotifyIfNeeded<T>(CollectionSubscription<T> collectionSubscription, NotificationCache cache) where T : class
         {
@@ -36,8 +34,8 @@ namespace LiteDB.Realtime.Notifications
                 Notify(collectionSubscription);
                 return;
             }
-
         }
+
         internal void NotifyIfNeeded<T>(DocumentSubscription<T> documentSubscription, NotificationCache cache) where T : class
         {
             if (cache.Broadcasts.Contains(documentSubscription.Collection))
@@ -56,10 +54,7 @@ namespace LiteDB.Realtime.Notifications
                 Notify(documentSubscription);
                 return;
             }
-
-
         }
-
 
         internal IDisposable Subscribe<T>(SubscriptionBase<T> subscription) where T : class
         {
@@ -79,7 +74,6 @@ namespace LiteDB.Realtime.Notifications
             {
                 subscription.OnNextIfNeeded(copy);
             }
-
         }
 
         /// <summary>
@@ -110,7 +104,6 @@ namespace LiteDB.Realtime.Notifications
             Task.Run(() => documentSubscription.Observer?.OnNext(nextValue));
         }
 
-
         /// <summary>
         /// Clear notification cache
         /// </summary>
@@ -118,6 +111,5 @@ namespace LiteDB.Realtime.Notifications
         {
             Cache.Clear();
         }
-
     }
 }
