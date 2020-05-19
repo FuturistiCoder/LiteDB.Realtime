@@ -2,6 +2,10 @@ trigger:
   branches:
     include:
     - master
+  tags:
+    include: 
+    - '*'
+
   paths:
     exclude:
     - README.md
