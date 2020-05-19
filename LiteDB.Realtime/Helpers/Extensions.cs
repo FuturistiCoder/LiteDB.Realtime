@@ -13,21 +13,17 @@ namespace LiteDB.Realtime.Helpers
                 Filename = connectionString.Filename,
                 Password = connectionString.Password,
                 InitialSize = connectionString.InitialSize,
-                LimitSize = connectionString.LimitSize,
-                UtcDate = connectionString.UtcDate,
-                Timeout = connectionString.Timeout,
-                ReadOnly = connectionString.ReadOnly
+                ReadOnly = connectionString.ReadOnly,
+                Collation = connectionString.Collation
             };
 
             // create engine implementation as Connection Type
-            if (connectionString.Mode == ConnectionMode.Embedded)
+            return connectionString.Connection switch
             {
-                return new RealtimeLiteEngine(new LiteEngine(settings));
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+                ConnectionType.Direct => new RealtimeLiteEngine(new LiteEngine(settings)),
+                ConnectionType.Shared => new RealtimeLiteEngine(new SharedEngine(settings)),
+                _ => throw new NotImplementedException()
+            };
         }
 
         public static ILiteEngine CreateRealtimeEngine(this Stream stream)

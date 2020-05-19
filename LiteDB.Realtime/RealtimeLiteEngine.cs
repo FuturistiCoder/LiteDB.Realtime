@@ -15,19 +15,9 @@ namespace LiteDB.Realtime
             _engine = engine;
         }
 
-        public int Analyze(string[] collections)
-        {
-            return _engine.Analyze(collections);
-        }
-
         public bool BeginTrans()
         {
             return _engine.BeginTrans();
-        }
-
-        public void Checkpoint()
-        {
-            _engine.Checkpoint();
         }
 
         public bool Commit()
@@ -223,7 +213,24 @@ namespace LiteDB.Realtime
             }
         }
 
-        public long Shrink()
-            => _engine.Shrink();
+        public int Checkpoint()
+        {
+            return _engine.Checkpoint();
+        }
+
+        public long Rebuild(RebuildOptions options)
+        {
+            return _engine.Rebuild(options);
+        }
+
+        public BsonValue Pragma(string name)
+        {
+            return _engine.Pragma(name);
+        }
+
+        public bool Pragma(string name, BsonValue value)
+        {
+            return _engine.Pragma(name, value);
+        }
     }
 }

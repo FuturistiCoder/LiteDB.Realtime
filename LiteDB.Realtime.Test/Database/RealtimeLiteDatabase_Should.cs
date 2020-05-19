@@ -22,16 +22,24 @@ namespace LiteDB.Realtime.Test.Database
         public void Be_Created_By_Constructors()
         {
             var fileName = Path.GetTempPath() + Path.GetRandomFileName();
-            new RealtimeLiteDatabase(fileName);
-
-            new RealtimeLiteDatabase(new ConnectionString
             {
-                Filename = fileName
-            });
+                using var db1 = new RealtimeLiteDatabase(fileName);
+            }
 
-            new RealtimeLiteDatabase(new MemoryStream { });
+            {
+                using var db2 = new RealtimeLiteDatabase(new ConnectionString
+                {
+                    Filename = fileName
+                });
+            }
 
-            new RealtimeLiteDatabase(new RealtimeLiteEngine(new LiteEngine()));
+            {
+                using var db3 = new RealtimeLiteDatabase(new MemoryStream { });
+            }
+
+            {
+                using var db4 = new RealtimeLiteDatabase(new RealtimeLiteEngine(new LiteEngine()));
+            }
         }
 
         [Fact]

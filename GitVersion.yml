@@ -2,7 +2,7 @@ assembly-versioning-scheme: MajorMinorPatchTag
 mode: ContinuousDelivery
 branches:
   master:
-    tag: beta.2
+    tag: beta
 
 ignore:
   sha: []
