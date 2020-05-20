@@ -9,15 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InternalsVisibleTo.MSBuild" Version="1.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="LiteDB" Version="5.0.8" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="LiteDB.Realtime.Test, PublicKey=002400000480000094000000060200000024000052534131000400000100010005e6c227e54132f28859fe404617983ab022006793792d8318ab70d2d41590fd093f5232113505f8254f23d61d325b0b7c232060a3a9c0b925f95698fb9a116af3c562be86c0a4c6a2b99c34e4ac31f5cd7ea5188714e7940f28795ab6e1886e73338824bb2746ad14b03aba74e2210b5e87ba3ff8d61fe6993ec22e723fefdc" />
+    <!-- waiting for Net5 (change to InternalsVisibleTo in Net5) -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>LiteDB.Realtime.Test, PublicKey=002400000480000094000000060200000024000052534131000400000100010005e6c227e54132f28859fe404617983ab022006793792d8318ab70d2d41590fd093f5232113505f8254f23d61d325b0b7c232060a3a9c0b925f95698fb9a116af3c562be86c0a4c6a2b99c34e4ac31f5cd7ea5188714e7940f28795ab6e1886e73338824bb2746ad14b03aba74e2210b5e87ba3ff8d61fe6993ec22e723fefdc</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>
