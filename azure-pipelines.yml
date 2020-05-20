@@ -43,6 +43,23 @@ steps:
       BuildVersion: $(GitVersion.SemVer)
     condition: eq(variables['imageName'], 'windows-latest')
 
+
+  - task: DownloadSecureFile@1
+    inputs:
+      secureFile: 'SignKey.snk'
+
+  - task: CopyFiles@2
+    inputs:
+      Contents: 'SignKey.snk'
+      SourceFolder: '$(Agent.TempDirectory)'
+      TargetFolder: './LiteDB.Realtime'
+
+  - task: CopyFiles@2
+    inputs:
+      Contents: 'SignKey.snk'
+      SourceFolder: '$(Agent.TempDirectory)'
+      TargetFolder: './LiteDB.Realtime.Test'
+
   - task: DotNetCoreCLI@2
     displayName: dotnet build
     inputs:
