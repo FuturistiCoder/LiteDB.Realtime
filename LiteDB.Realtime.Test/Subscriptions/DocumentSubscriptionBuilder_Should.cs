@@ -15,6 +15,24 @@ namespace LiteDB.Realtime.Test.Subscriptions
         {
             var collectionName = "testCollection";
             var id = new BsonValue(Guid.NewGuid());
+            new SubscriptionBuilder(_db.NotificationService)
+                .Collection<Model>(null)
+                .Id(id)
+                .As<ISubscriptionBuilderBase>()
+                .Subscription
+                .Collection
+                .Should()
+                .BeNull();
+
+            new SubscriptionBuilder(_db.NotificationService)
+                .Collection<Model>(collectionName)
+                .Id(id)
+                .As<ISubscriptionBuilderBase>()
+                .Subscription
+                .Collection
+                .Should()
+                .Be(collectionName);
+
             var collSub = new CollectionSubscription<Model>(_db.NotificationService)
             {
                 Collection = collectionName,
@@ -35,25 +53,5 @@ namespace LiteDB.Realtime.Test.Subscriptions
             docSub.Observer.Should().NotBeNull();
         }
 
-        [Fact]
-        public void Build_A_Collection_Subscription()
-        {
-            var collectionName = "testCollection";
-            var id = new BsonValue(Guid.NewGuid());
-            var sub = new CollectionSubscription<Model>(_db.NotificationService)
-            {
-                Collection = collectionName,
-            };
-
-            var builder = new CollectionSubscriptionBuilder<Model>(_db.NotificationService, sub);
-            sub.Collection.Should().Be(collectionName);
-            // before subscribing
-            sub.Observer.Should().BeNull();
-
-            builder.Subscribe(listObj => { });
-
-            // after subscribing
-            sub.Observer.Should().NotBeNull();
-        }
     }
 }

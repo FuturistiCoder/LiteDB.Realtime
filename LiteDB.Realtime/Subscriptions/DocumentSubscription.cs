@@ -7,7 +7,6 @@ namespace LiteDB.Realtime.Subscriptions
     {
         public BsonValue? Id { get; set; }
 
-        // public IObserver<T> AsObserver() => ObserverObject as IObserver<T>;
         public IObserver<T>? Observer { get; set; }
 
         public DocumentSubscription(NotificationService notificationService)

@@ -24,7 +24,7 @@ using (var db = new RealtimeLiteDatabase(new MemoryStream()))
 
     // docuement subscription
     // subscribe with System.Reactive extensions
-    db.Realtime.Collection<Item>("items").Id(new BsonValue(newItem.Id)).Subscribe(item => receivedItem = item); 
+    db.Realtime.Collection<Item>("items").Id(new BsonValue(newItem.Id)).Subscribe(item => receivedItem = item);
 
     // collection subscription
     // subscribe with System.Reactive extensions 
@@ -39,3 +39,23 @@ using (var db = new RealtimeLiteDatabase(new MemoryStream()))
 
 ```
 
+If you change the collection quickly, and you want to throttle the notifications.
+
+```C#
+// raw collection subscription
+// this subscription will NOT retrieve the list of items each time, but a ILiteCollection<Item> instead.
+// you can do what you want with this ILiteCollection<Item>
+// subscribe with System.Reactive extensions
+db.Reactive.Collection<Item>("items").Raw.Subscribe(col => /* col is type of ILiteCollection<Item> */);
+
+// you can throttle the notifications by 1 second for example.
+db.Realtime
+    .Collection<Item>("items")
+    .Raw
+    .Throttle(TimeSpan.FromSecond(1)) // System.Reactive
+    .Subscribe(col =>
+    {
+        var list = col.Query().OrderBy(i => i.Id).Limit(10).ToList();
+        Update(list);
+    });
+```

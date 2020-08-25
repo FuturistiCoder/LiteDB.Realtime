@@ -8,7 +8,7 @@ namespace LiteDB.Realtime.Subscriptions
         protected readonly NotificationService _notificationService;
         public string Collection { get; set; } = string.Empty;
         public Type Type => typeof(T);
-        // public object ObserverObject { get; set; }
+        public ILiteCollection<T>? LiteCollection { get; set; }
 
         public SubscriptionBase(NotificationService notificationService)
         {

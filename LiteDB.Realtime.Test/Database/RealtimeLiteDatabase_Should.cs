@@ -46,12 +46,16 @@ namespace LiteDB.Realtime.Test.Database
         {
             using var db = new RealtimeLiteDatabase(new MemoryStream());
             List<Item> receivedItems = null;
+            int rawOnNextCount = 0;
             // collection subscription
             db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+            // collection raw subscription
+            db.Realtime.Collection<Item>("items").Raw.Subscribe(liteCollection => rawOnNextCount++);
 
             //waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
             receivedItems.Should().BeEmpty();
+            rawOnNextCount.Should().Be(1);
 
             var newItem = new Item
             {
@@ -69,6 +73,8 @@ namespace LiteDB.Realtime.Test.Database
             receivedItems[0].Id.Should().Be(newId.AsGuid);
             receivedItems[0].Name.Should().Be(newItem.Name);
             receivedItems[0].Price.Should().Be(newItem.Price);
+
+            rawOnNextCount.Should().Be(2);
         }
 
         [Fact]
@@ -76,12 +82,16 @@ namespace LiteDB.Realtime.Test.Database
         {
             using var db = new RealtimeLiteDatabase(new MemoryStream());
             List<Item> receivedItems = null;
+            int rawOnNextCount = 0;
             // collection subscription
             db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+            // collection raw subscription
+            db.Realtime.Collection<Item>("items").Raw.Subscribe(liteCollection => rawOnNextCount++);
 
             //waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
             receivedItems.Should().BeEmpty();
+            rawOnNextCount.Should().Be(1);
 
             var newItem = new Item
             {
@@ -100,6 +110,7 @@ namespace LiteDB.Realtime.Test.Database
             receivedItems[0].Id.Should().Be(newItem.Id);
             receivedItems[0].Name.Should().Be(newItem.Name);
             receivedItems[0].Price.Should().Be(newItem.Price);
+            rawOnNextCount.Should().Be(2);
 
             // update item
             newItem.Price = 99m;
@@ -114,6 +125,7 @@ namespace LiteDB.Realtime.Test.Database
             receivedItems[0].Id.Should().Be(newItem.Id);
             receivedItems[0].Name.Should().Be(newItem.Name);
             receivedItems[0].Price.Should().Be(newItem.Price);
+            rawOnNextCount.Should().Be(3);
         }
 
         [Fact]

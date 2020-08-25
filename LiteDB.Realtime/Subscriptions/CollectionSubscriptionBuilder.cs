@@ -24,6 +24,18 @@ namespace LiteDB.Realtime.Subscriptions
             return new DocumentSubscriptionBuilder<T>(_notificationService, documentSubscription);
         }
 
+        public IObservable<ILiteCollection<T>> Raw
+        { 
+            get
+            {
+                var collectionRawSubscription = new CollectionRawSubscription<T>(_notificationService)
+                {
+                    Collection = _subscription.Collection
+                };
+                return new CollectionRawSubscriptionBuilder<T>(_notificationService, collectionRawSubscription);
+            }
+        }
+
         public IDisposable Subscribe(IObserver<List<T>> observer)
         {
             _subscription.Observer = observer;

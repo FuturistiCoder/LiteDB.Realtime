@@ -36,6 +36,23 @@ namespace LiteDB.Realtime.Notifications
             }
         }
 
+        internal void NotifyIfNeeded<T>(CollectionRawSubscription<T> collectionRawSubscription, NotificationCache cache) where T : class
+        {
+            if (cache.Broadcasts.Contains(collectionRawSubscription.Collection))
+            {
+                Notify(collectionRawSubscription);
+                return;
+            }
+
+            if (cache.Collections.Contains(collectionRawSubscription.Collection))
+            {
+                Notify(collectionRawSubscription);
+                return;
+            }
+
+        }
+
+
         internal void NotifyIfNeeded<T>(DocumentSubscription<T> documentSubscription, NotificationCache cache) where T : class
         {
             if (cache.Broadcasts.Contains(documentSubscription.Collection))
@@ -58,6 +75,12 @@ namespace LiteDB.Realtime.Notifications
 
         internal IDisposable Subscribe<T>(SubscriptionBase<T> subscription) where T : class
         {
+            if (_database is null)
+            {
+                throw new InvalidOperationException("notification service is not initialized");
+            }
+
+            subscription.LiteCollection = _database.GetCollection<T>(subscription.Collection);
             _subscriptions.TryAdd(subscription, default);
             return new Unsubscriber(_subscriptions, subscription);
         }
@@ -81,13 +104,27 @@ namespace LiteDB.Realtime.Notifications
         /// </summary>
         public void Notify<T>(CollectionSubscription<T> collectionSubscription) where T : class
         {
-            if (_database is null)
+            if (collectionSubscription.LiteCollection is null)
             {
                 throw new InvalidOperationException("notification service is not initialized");
             }
 
-            var nextValue = _database.GetCollection<T>(collectionSubscription.Collection).Query().ToList();
+            var nextValue = collectionSubscription.LiteCollection.Query().ToList();
             Task.Run(() => collectionSubscription.Observer?.OnNext(nextValue));
+        }
+
+        /// <summary>
+        /// Notify one subscription
+        /// </summary>
+        public void Notify<T>(CollectionRawSubscription<T> collectionRawSubscription) where T : class
+        {
+            if (collectionRawSubscription.LiteCollection is null)
+            {
+                throw new InvalidOperationException("notification service is not initialized");
+            }
+
+            var nextValue = collectionRawSubscription.LiteCollection;
+            Task.Run(() => collectionRawSubscription.Observer?.OnNext(nextValue));
         }
 
         /// <summary>
@@ -95,12 +132,12 @@ namespace LiteDB.Realtime.Notifications
         /// </summary>
         public void Notify<T>(DocumentSubscription<T> documentSubscription) where T : class
         {
-            if (_database is null)
+            if (documentSubscription.LiteCollection is null)
             {
                 throw new InvalidOperationException("notification service is not initialized");
             }
 
-            var nextValue = _database.GetCollection<T>(documentSubscription.Collection).FindById(documentSubscription.Id);
+            var nextValue = documentSubscription.LiteCollection.FindById(documentSubscription.Id);
             Task.Run(() => documentSubscription.Observer?.OnNext(nextValue));
         }
 
