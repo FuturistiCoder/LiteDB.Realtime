@@ -24,7 +24,7 @@ using (var db = new RealtimeLiteDatabase(new MemoryStream()))
 
     // docuement subscription
     // subscribe with System.Reactive extensions
-    db.Realtime.Collection<Item>("items").Id(new BsonValue(newItem.Id)).Subscribe(item => receivedItem = item);
+    db.Realtime.Collection<Item>("items").Id(newItem.Id).Subscribe(item => receivedItem = item);
 
     // collection subscription
     // subscribe with System.Reactive extensions 
