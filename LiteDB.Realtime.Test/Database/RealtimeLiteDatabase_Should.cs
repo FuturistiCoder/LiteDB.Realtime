@@ -48,9 +48,9 @@ namespace LiteDB.Realtime.Test.Database
             List<Item> receivedItems = null;
             int rawOnNextCount = 0;
             // collection subscription
-            db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+            using var colSub = db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
             // collection raw subscription
-            db.Realtime.Collection<Item>("items").Raw.Subscribe(liteCollection => rawOnNextCount++);
+            using var rawColSub = db.Realtime.Collection<Item>("items").Raw.Subscribe(liteCollection => rawOnNextCount++);
 
             //waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -84,9 +84,9 @@ namespace LiteDB.Realtime.Test.Database
             List<Item> receivedItems = null;
             int rawOnNextCount = 0;
             // collection subscription
-            db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+            using var colSub = db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
             // collection raw subscription
-            db.Realtime.Collection<Item>("items").Raw.Subscribe(liteCollection => rawOnNextCount++);
+            using var rawColSub = db.Realtime.Collection<Item>("items").Raw.Subscribe(liteCollection => rawOnNextCount++);
 
             //waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -143,10 +143,10 @@ namespace LiteDB.Realtime.Test.Database
             newItem.Id = newId.AsGuid;
 
             // docuement subscription
-            db.Realtime.Collection<Item>("items").Id(newId).Subscribe(item => receivedItem = item);
+            using var docSub = db.Realtime.Collection<Item>("items").Id(newId).Subscribe(item => receivedItem = item);
 
             // collection subscription
-            db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+            using var colSub = db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
 
             // waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -200,9 +200,9 @@ namespace LiteDB.Realtime.Test.Database
             newItem.Id = newId.AsGuid;
 
             // docuement subscription
-            db.Realtime.Collection<Item>("items").Id(newId).Subscribe(item => receivedItem = item);
+            using var docSub = db.Realtime.Collection<Item>("items").Id(newId).Subscribe(item => receivedItem = item);
             // collection subscription
-            db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
+            using var colSub = db.Realtime.Collection<Item>("items").Subscribe(items => receivedItems = items);
 
             // waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -246,7 +246,7 @@ namespace LiteDB.Realtime.Test.Database
         {
             using var db = new RealtimeLiteDatabase(new MemoryStream());
             bool isNull = false;
-            db.Realtime.Collection<Item>("items").Id(new BsonValue(Guid.NewGuid())).Subscribe(item => isNull = item is null);
+            using var docSub = db.Realtime.Collection<Item>("items").Id(new BsonValue(Guid.NewGuid())).Subscribe(item => isNull = item is null);
 
             // waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -261,7 +261,7 @@ namespace LiteDB.Realtime.Test.Database
             var id = Guid.NewGuid();
             using var db = new RealtimeLiteDatabase(new MemoryStream());
             Item receivedItem = new Item();
-            db.Realtime.Collection<Item>("items").Id(new BsonValue(id)).Subscribe(item => receivedItem = item);
+            using var docSub = db.Realtime.Collection<Item>("items").Id(new BsonValue(id)).Subscribe(item => receivedItem = item);
 
             // waiting for notification
             Thread.Sleep(TimeSpan.FromSeconds(1));
