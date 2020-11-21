@@ -9,7 +9,7 @@ namespace LiteDB.Realtime.Subscriptions
 
         public DocumentSubscriptionBuilder(NotificationService notificationService, DocumentSubscription<T> subscription) : base(notificationService, subscription)
         {
-            _subscription = subscription ?? throw new NullReferenceException(nameof(subscription));
+            _subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
         }
 
         public IDisposable Subscribe(IObserver<T> observer)

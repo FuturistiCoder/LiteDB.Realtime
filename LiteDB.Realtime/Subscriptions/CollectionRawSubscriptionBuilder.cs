@@ -10,7 +10,7 @@ namespace LiteDB.Realtime.Subscriptions
         public CollectionRawSubscriptionBuilder(NotificationService notification, CollectionRawSubscription<T> subscription)
             : base(notification, subscription)
         {
-            _subscription = subscription ?? throw new NullReferenceException(nameof(subscription));
+            _subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
         }
 
         public IDisposable Subscribe(IObserver<ILiteCollection<T>> observer)

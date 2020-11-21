@@ -11,7 +11,7 @@ namespace LiteDB.Realtime.Subscriptions
         public CollectionSubscriptionBuilder(NotificationService notificationService, CollectionSubscription<T> subscription)
             : base(notificationService, subscription)
         {
-            _subscription = subscription ?? throw new NullReferenceException(nameof(subscription));
+            _subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
         }
 
         public IObservable<T> Id(BsonValue id)
