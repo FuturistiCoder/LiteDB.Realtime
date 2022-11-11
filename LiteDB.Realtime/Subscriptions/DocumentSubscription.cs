@@ -3,7 +3,7 @@ using System;
 
 namespace LiteDB.Realtime.Subscriptions
 {
-    internal class DocumentSubscription<T> : SubscriptionBase<T> where T : class
+    internal class DocumentSubscription<T> : SubscriptionBase<T>
     {
         public BsonValue? Id { get; set; }
 

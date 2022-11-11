@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace LiteDB.Realtime.Subscriptions
 {
-    internal class CollectionSubscriptionBuilder<T> : SubscriptionBuilderBase<T>, ICollectionSubscriptionBuilder<T> where T : class
+    internal class CollectionSubscriptionBuilder<T> : SubscriptionBuilderBase<T>, ICollectionSubscriptionBuilder<T>
     {
         private readonly CollectionSubscription<T> _subscription;
 

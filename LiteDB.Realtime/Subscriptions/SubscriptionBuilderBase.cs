@@ -3,7 +3,7 @@ using System;
 
 namespace LiteDB.Realtime.Subscriptions
 {
-    internal class SubscriptionBuilderBase<T> : ISubscriptionBuilderBase where T : class
+    internal class SubscriptionBuilderBase<T> : ISubscriptionBuilderBase
     {
         protected readonly NotificationService _notificationService;
         protected SubscriptionBase<T> _subscriptionBase;

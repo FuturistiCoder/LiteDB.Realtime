@@ -3,7 +3,7 @@ using System;
 
 namespace LiteDB.Realtime.Subscriptions
 {
-    internal class DocumentSubscriptionBuilder<T> : SubscriptionBuilderBase<T>, IObservable<T> where T : class
+    internal class DocumentSubscriptionBuilder<T> : SubscriptionBuilderBase<T>, IObservable<T>
     {
         private readonly DocumentSubscription<T> _subscription;
 

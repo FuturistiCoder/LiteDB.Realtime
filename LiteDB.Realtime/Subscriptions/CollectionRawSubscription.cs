@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LiteDB.Realtime.Subscriptions
 {
-    class CollectionRawSubscription<T> : SubscriptionBase<T> where T : class
+    class CollectionRawSubscription<T> : SubscriptionBase<T>
     {
         public IObserver<ILiteCollection<T>>? Observer { get; set; }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LiteDB.Realtime.Subscriptions
 {
-    public interface ICollectionSubscriptionBuilder<T> : ISubscriptionBuilderBase, IObservable<List<T>> where T : class
+    public interface ICollectionSubscriptionBuilder<T> : ISubscriptionBuilderBase, IObservable<List<T>>
     {
         /// <summary>
         /// to make a document subscription

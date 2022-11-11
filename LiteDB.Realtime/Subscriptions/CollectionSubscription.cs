@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace LiteDB.Realtime.Subscriptions
 {
-    internal class CollectionSubscription<T> : SubscriptionBase<T> where T : class
+    internal class CollectionSubscription<T> : SubscriptionBase<T>
     {
         public IObserver<List<T>>? Observer { get; set; }
 
